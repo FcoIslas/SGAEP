@@ -53,18 +53,12 @@
 								</select>
 							</td>
 						</tr>
-						<tr>
-								<td>
-									<!--AJAX Section, get the values of the Subject-->
-
-									<!--AJAX Section, get the values of the Subject-->
-								</td>
-						</tr>
 						<tr hidden="hidden"><td><label>UserType</label></td><td><input type="number" name="formConsultSubjectType" value="1"></td></tr>
 					</table><br/>
+					<!--AJAX Section, get the values of the Subject-->
 					<div id="txtHint" class="">
-
 					</div>
+					<!--AJAX Section, get the values of the Subject-->
 				</form><br/>
 			</div>
 			<div id="moduleConsultSubjectQuestions">
