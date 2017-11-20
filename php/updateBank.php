@@ -67,6 +67,7 @@
 							<tr>
 								<th>Parcial</th>
 								<th>Pregunta</th>
+								<th>Tipo de Respuesta</th>
 								<th>Respuesta</th>
 							</tr>
 						</thead>
@@ -82,23 +83,6 @@
 									$_SESSION["vcSubjectChecked"] = $_POST["formConsultSubjectToCheck"];
 									$_SESSION["intSubjectSemesterCheked"] = $_POST["formConsultSubjectSemester"];
 									$_SESSION["vcIdSubject"] = $_SESSION["vcRFC"].$_SESSION["vcSubjectChecked"].$_SESSION["intSubjectSemesterCheked"];
-									//echo "<h1>Hola ".$_SESSION["vcIdSubject"]."</h1>Hola ";
-									//stock this variables to add the info to the database
-									//Show the subject that we are modifying
-									/*$results2 = mysql_query("SELECT * FROM tableUsers WHERE vcIdSubject='".$_SESSION["vcIdSubject"]."'");
-									while($row2 = mysql_fetch_array($results2)){
-										echo "Materia: ".$row2["vcSubjectName"]."<br/>";
-										echo "Carrera: ".$row2["vcSubjectCareer"]."<br/>";
-										if ($row2["intTurn"]=='') {
-											echo "Turno: <br/>";
-										}elseif ($row2["intTurn"]=='1') {
-											echo "Turno: Matutino<br/>";
-										}else{
-											echo "Turno: Vespertino<br/>";
-										}
-										echo "Semestre: ".$row2["intSemester"]."<br/>";
-										}*/
-									//Show the subject that we are modifying
 									$results = mysql_query("SELECT * FROM tableQuestions WHERE vcRFC='".$_SESSION["vcRFC"]."' AND vcIdSubject='".$_SESSION["vcRFC"].$_POST["formConsultSubjectToCheck"].$_POST["formConsultSubjectSemester"]."'");
 									while ($row = mysql_fetch_array($results)) {
 							?>
@@ -123,19 +107,26 @@
 								<form name="formUpdateQuestionBank" method="post" action="Actions/actionAddQuestion.php">
 									<td>
 										<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
-											<option value="1">1ero</option>
+											<option value="1">1er</option>
 											<option value="2">2do</option>
 										</select>
 									</td>
 									<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td> <!--Textbox new answer-->
 									<td>
+										<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
+											<option value="booleanQuestion">Verdadero o Falso</option>
+											<option value="multipleOptions">Opción Múltiple</option>
+											<option value="openQuestion">Pregunta Abierta</option>
+										</select>
+									</td>
+									<!--<td>
 										<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
 											<option>
 												<option value="1">Verdadero</option>
 												<option value="0">Falso</option>
 											</option>
 										</select>
-									</td>
+									</td>-->
 									<td>
 										<input type="submit">
 									</td>

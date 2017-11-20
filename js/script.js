@@ -1,3 +1,19 @@
+function showQuestionType(str){
+  switch (str) {
+    case "booleanQuestion":
+       alert("boolean");
+      break;
+      case "multipleOptions":
+         alert("Múltiple");
+        break;
+        case "openQuestion":
+           alert("Abierta");
+          break;
+    default:
+        alert("Seleccione una opción");
+          break;
+  }
+}
 function showUser(str) {
 	//AJAX Section, get the values of the Subject
   str = encodeURI(str);
