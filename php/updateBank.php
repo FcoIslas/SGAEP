@@ -37,6 +37,7 @@
 							<td><label>Materia</label></td>
 							<td>
 								<select name="formConsultSubjectToCheck" onchange="showUser(this.value)">
+									<option value="">Seleccione Materia</option>
 									<?php
 										//ACCESS TO DATABASE
 										session_start();
@@ -67,8 +68,9 @@
 							<tr>
 								<th>Parcial</th>
 								<th>Pregunta</th>
-								<th>Tipo de Respuesta</th>
-								<th>Respuesta</th>
+								<th>Tipo de Pregunta</th>
+								<th id="thQuestionTypeBoolean" style="display: none;">Respuesta</th>
+								<th id="thQuestionTypeOpen" style="display: none;">Respuesta</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -114,22 +116,34 @@
 									<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td> <!--Textbox new answer-->
 									<td>
 										<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
+											<option value="">Seleccione Opción</option>
 											<option value="booleanQuestion">Verdadero o Falso</option>
 											<option value="multipleOptions">Opción Múltiple</option>
 											<option value="openQuestion">Pregunta Abierta</option>
 										</select>
 									</td>
-									<!--<td>
-										<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
-											<option>
-												<option value="1">Verdadero</option>
-												<option value="0">Falso</option>
-											</option>
-										</select>
-									</td>-->
-									<td>
-										<input type="submit">
-									</td>
+									<!--Hidding-->
+
+										<td id="questionTypeBoolean">
+											<div class="hideTypeBoolean" id="hideTypeBoolean" style="display: none;">
+											<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
+													<option value="1">Verdadero</option>
+													<option value="0">Falso</option>
+											</select>
+											</div>
+											<div class="hideTypeOpen" id="hideTypeOpen" style="display: none;">
+												<input type="text" name="textInputOpen">
+											</div>
+										</td>
+										<td>
+											<div class="hideTypeBooleanButton" id="hideTypeBooleanButton" style="display: none;">
+												<input type="submit" value="Enviar Pregunta">
+											</div>
+											<div class="hideTypeOpenButton" id="hideTypeOpenButton" style="display: none;">
+												<input type="submit" value="Enviar Pregunta">
+											</div>
+										</td>
+										<!--Hidding-->
 								</form>
 							</tr>
 						</tbody>

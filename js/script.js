@@ -1,14 +1,24 @@
 function showQuestionType(str){
   switch (str) {
     case "booleanQuestion":
-       alert("boolean");
+      document.getElementById('hideTypeBoolean').style.display = 'block';
+      document.getElementById('hideTypeBooleanButton').style.display = 'block';
+      document.getElementById('thQuestionTypeBoolean').style.display = 'block';
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      document.getElementById('hideTypeOpenButton').style.display = 'none';
+      document.getElementById('thQuestionTypeOpen').style.display = 'none';
       break;
       case "multipleOptions":
-         alert("Múltiple");
+        alert("Multiple");
         break;
-        case "openQuestion":
-           alert("Abierta");
-          break;
+    case "openQuestion":
+      document.getElementById('hideTypeOpen').style.display = 'block';
+      document.getElementById('hideTypeOpenButton').style.display = 'block';
+      document.getElementById('thQuestionTypeOpen').style.display = 'block';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById('hideTypeBooleanButton').style.display = 'none';
+      document.getElementById('thQuestionTypeBoolean').style.display = 'none';
+        break;
     default:
         alert("Seleccione una opción");
           break;
