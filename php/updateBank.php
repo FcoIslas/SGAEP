@@ -78,38 +78,6 @@
 					</form>
 					<!--LA COMIDA VA AQUÍ-->
 					<tbody>
-						<?php
-							//This php is to get all the questions already added to DB
-							if(isset($_POST["buttonSubtmit"])){
-								$connect = mysql_connect("localhost","root","dwarfest");
-								if(!$connect){
-									die(mysql_error());
-								}
-								mysql_select_db("sgaep");
-								//Stock this variables to add the info to the database
-								$_SESSION["vcSubjectChecked"] = $_POST["formConsultSubjectToCheck"];
-								$_SESSION["intSubjectSemesterCheked"] = $_POST["formConsultSubjectSemester"];
-								$_SESSION["vcIdSubject"] = $_SESSION["vcRFC"].$_SESSION["vcSubjectChecked"].$_SESSION["intSubjectSemesterCheked"];
-								$results = mysql_query("SELECT * FROM tableQuestions WHERE vcRFC='".$_SESSION["vcRFC"]."' AND vcIdSubject='".$_SESSION["vcRFC"].$_POST["formConsultSubjectToCheck"].$_POST["formConsultSubjectSemester"]."'");
-								while ($row = mysql_fetch_array($results)) {
-						?>
-						<tr>
-							<td><?php echo $row["intParcial"]?></td>
-							<td><?php echo $row["ltQuestion"]?></td>
-							<td>
-								<?php
-									if($row["bAnswer"]==1){
-										echo "Verdadero";
-									}else{
-										echo "Falso";
-									}
-								?>
-							</td>
-						</tr>
-						<?php
-								}
-							}
-						?>
 						<tr>
 							<td>
 								<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
@@ -120,7 +88,6 @@
 							<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td> <!--Textbox new answer-->
 							<td>
 								<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
-									<option value="test">test</option>
 									<option value="">Seleccione Opción</option>
 									<option value="booleanQuestion">Verdadero o Falso</option>
 									<option value="multipleOptions">Opción Múltiple</option>
@@ -154,6 +121,29 @@
 						</tr>
 					</tbody>
 				</table><br/>
+				<!--In Construction the new tr for multiple questions-->
+				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
+					<table>
+						<thead>
+							<th></th>
+							<th>Agregar Respuestas</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>A<input type="text"/></td>
+								<td>B<input type="text"/></td>
+								<td>Respuesta Correcta</td>
+							</tr>
+							<tr>
+								<td>C<input type="text"/></td>
+								<td>D<input type="text"/></td>
+								<td><input type="text"/></td>
+								<td><input type="button" value="Agregar Pregunta"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!--In Construction the new tr for multiple questions-->
 			</div>
 			<!--Module to add questions to subject-->
 

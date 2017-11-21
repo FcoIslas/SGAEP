@@ -7,9 +7,16 @@ function showQuestionType(str){
       document.getElementById('hideTypeOpen').style.display = 'none';
       document.getElementById('hideTypeOpenButton').style.display = 'none';
       document.getElementById('thQuestionTypeOpen').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
       break;
     case "multipleOptions":
-        alert("Multiple");
+      document.getElementById("hydeTypeMultiple").style.display = 'block';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById('hideTypeBooleanButton').style.display = 'none';
+      document.getElementById('thQuestionTypeBoolean').style.display = 'none';
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      document.getElementById('hideTypeOpenButton').style.display = 'none';
+      document.getElementById('thQuestionTypeOpen').style.display = 'none';
       break;
     case "openQuestion":
       document.getElementById('hideTypeOpen').style.display = 'block';
@@ -18,6 +25,17 @@ function showQuestionType(str){
       document.getElementById('hideTypeBoolean').style.display = 'none';
       document.getElementById('hideTypeBooleanButton').style.display = 'none';
       document.getElementById('thQuestionTypeBoolean').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
+        break;
+      case "":
+        document.getElementById('hideTypeOpen').style.display = 'none';
+        document.getElementById('hideTypeOpenButton').style.display = 'none';
+        document.getElementById('thQuestionTypeOpen').style.display = 'none';
+        document.getElementById('hideTypeBoolean').style.display = 'none';
+        document.getElementById('hideTypeBooleanButton').style.display = 'none';
+        document.getElementById('thQuestionTypeBoolean').style.display = 'none';
+        document.getElementById("hydeTypeMultiple").style.display = 'none';
+        alert("Seleccione Opción");
         break;
     default:
         alert("Seleccione una opción");
