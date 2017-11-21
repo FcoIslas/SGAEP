@@ -3,31 +3,19 @@ function showQuestionType(str){
     case "booleanQuestion":
       //show the inputs for Boolean questions
       document.getElementById('hideTypeBoolean').style.display = 'block';
-      document.getElementById('hideTypeBooleanButton').style.display = 'block';
-      document.getElementById('thQuestionTypeBoolean').style.display = 'block';
       document.getElementById('hideTypeOpen').style.display = 'none';
-      document.getElementById('hideTypeOpenButton').style.display = 'none';
-      document.getElementById('thQuestionTypeOpen').style.display = 'none';
       document.getElementById("hydeTypeMultiple").style.display = 'none';
       break;
     case "multipleOptions":
       //show the inputs for Multiple questions
       document.getElementById("hydeTypeMultiple").style.display = 'block';
       document.getElementById('hideTypeBoolean').style.display = 'none';
-      document.getElementById('hideTypeBooleanButton').style.display = 'none';
-      document.getElementById('thQuestionTypeBoolean').style.display = 'none';
       document.getElementById('hideTypeOpen').style.display = 'none';
-      document.getElementById('hideTypeOpenButton').style.display = 'none';
-      document.getElementById('thQuestionTypeOpen').style.display = 'none';
       break;
     case "openQuestion":
       //show the inputs for Open questions
       document.getElementById('hideTypeOpen').style.display = 'block';
-      document.getElementById('hideTypeOpenButton').style.display = 'block';
-      document.getElementById('thQuestionTypeOpen').style.display = 'block';
       document.getElementById('hideTypeBoolean').style.display = 'none';
-      document.getElementById('hideTypeBooleanButton').style.display = 'none';
-      document.getElementById('thQuestionTypeBoolean').style.display = 'none';
       document.getElementById("hydeTypeMultiple").style.display = 'none';
       var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
       document.getElementById('textInputSubjectID').value = vcIdSubject;
@@ -35,27 +23,25 @@ function showQuestionType(str){
       var vcIdQuestion = vcIdSubject+id;
       document.getElementById('textInputQuestionID').value = vcIdQuestion;
       break;
-      case "":
-        //disappear the inputs for all type of questions
-        document.getElementById('hideTypeOpen').style.display = 'none';
-        document.getElementById('hideTypeOpenButton').style.display = 'none';
-        document.getElementById('thQuestionTypeOpen').style.display = 'none';
-        document.getElementById('hideTypeBoolean').style.display = 'none';
-        document.getElementById('hideTypeBooleanButton').style.display = 'none';
-        document.getElementById('thQuestionTypeBoolean').style.display = 'none';
-        document.getElementById("hydeTypeMultiple").style.display = 'none';
-        alert("Seleccione Opción");
-        break;
+    case "":
+      //disappear the inputs for all type of questions
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
+      alert("Seleccione Tipo de Pregunta");
+      break;
     default:
         alert("Seleccione una opción");
           break;
   }
 }
-function showUser(str) {
+function showSubject(str) {
 	//AJAX Section, get the values of the Subject
   str = encodeURI(str);
    if (str=="") {
        document.getElementById("txtHint").innerHTML = "";
+       document.getElementById("addQuestionToSubject").style.display = 'none';
+       alert("Seleccione Materia");
        return;
    } else {
        if (window.XMLHttpRequest) {
@@ -73,6 +59,7 @@ function showUser(str) {
        xmlhttp.open("GET","ajaxConDB.php?q="+str,true);
        xmlhttp.send();
    }
+  document.getElementById("addQuestionToSubject").style.display = 'block';
 }
 
 function generateSubjectID(){

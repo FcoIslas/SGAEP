@@ -37,7 +37,7 @@
 					<tr>
 						<td><label>Materia</label></td>
 						<td>
-							<select name="formConsultSubjectToCheck" id="formConsultSubjectToCheck" onchange="showUser(this.value)">
+							<select name="formConsultSubjectToCheck" id="formConsultSubjectToCheck" onchange="showSubject(this.value)">
 								<option value="">Seleccione Materia</option>
 								<?php
 									//ACCESS TO DATABASE
@@ -62,28 +62,15 @@
 			<!--Section to show the subject-->
 
 			<!--Module to add questions to subject-->
+			<div class="addQuestionToSubject" id="addQuestionToSubject" style="display: none;">
+
+
 			<div id="moduleConsultSubjectQuestions">
 				<table id="tableDeleteUsers">
-					<thead>
 						<tr>
-							<th>Parcial</th>
-							<th>Pregunta</th>
 							<th>Tipo de Pregunta</th>
-							<th id="thQuestionTypeBoolean" style="display: none;">Respuesta</th>
-							<th id="thQuestionTypeOpen" style="display: none;">Respuesta</th>
 						</tr>
-					</thead>
-
-					<tbody>
 						<tr>
-							<td>
-								<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
-									<option value="1">1er</option>
-									<option value="2">2do</option>
-								</select>
-							</td>
-							<!--Textbox new answer-->
-							<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td>
 							<td>
 								<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
 									<option value="">Seleccione Opción</option>
@@ -93,70 +80,125 @@
 								</select>
 							</td>
 							<!--Hidding-->
-							<td>
-								<!--Hidden Inputs for Answers-->
-								<div class="hideTypeBoolean" id="hideTypeBoolean" style="display: none;">
+						</tr>
+				</table>
+				<!--editing this section-->
+				<div class="hideTypeOpen" id="hideTypeOpen" style="display: none;">
+					<!--Form to send only open question to DB-->
+					<form class="formOpenQuestion" id="formOpenQuestion" action="ajaxSendQuestionDB.php" method="post">
+						<table>
+							<thead>
+								<th>Parcial</th>
+								<th>Pregunta</th>
+								<th>Respuesta</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
+											<option value="1">1er</option>
+											<option value="2">2do</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
+									</td>
+									<td>
+										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" />
+									</td>
+									<td>
+										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion" ><!--onclick="submitOpenQuestion()"-->
+									</td>
+									<td>
+										<input type="text" name="textInputQuestionID" id="textInputQuestionID" style="display: none;"/>
+										<input type="text" name="textInputSubjectID" id="textInputSubjectID" style="display: none;"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+					<!--Form to send only open question to DB-->
+				</div>
+				<div class="hideTypeBoolean" id="hideTypeBoolean" style="display: none;">
+					<table class="tableBooleanQuestion" id="tableBooleanQuestion">
+						<thead>
+							<th>Parcial</th>
+							<th>Pregunta</th>
+							<th>Respuesta</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
+										<option value="1">1er</option>
+										<option value="2">2do</option>
+									</select>
+								</td>
+								<td>
+									<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
+								</td>
+								<td>
 									<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
 										<option value="1">Verdadero</option>
 										<option value="0">Falso</option>
 									</select>
-								</div>
-								<div class="hideTypeOpen" id="hideTypeOpen" style="display: none;">
-									<!--Form to send only open question to DB-->
-									<form class="formOpenQuestion" id="formOpenQuestion" action="ajaxSendQuestionDB.php" method="post">
-										<input type="text" name="textInputQuestionID" id="textInputQuestionID" style="display: none;"/>
-										<input type="text" name="textInputSubjectID" id="textInputSubjectID" style="display: none;"/>
-										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" />
-										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion" ><!--onclick="submitOpenQuestion()"-->
-									</form>
-									<!--Form to send only open question to DB-->
-								</div>
-								<!--Hidden Inputs for Answers-->
-							</td>
-							<td>
-								<!--Hidden Buttons for Answers-->
-								<div class="hideTypeBooleanButton" id="hideTypeBooleanButton" style="display: none;">
-									<input type="submit" value="Enviar Pregunta">
-								</div>
-								<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
-								<div class="hideTypeOpenButton" id="hideTypeOpenButton" style="display: none;">
-									<!--<input type="submit" value="Enviar Pregunta" onclick="submitOpenQuestion()">-->
-									<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
-								</div>
-								<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
-								<!--Hidden Buttons for Answers-->
-							</td>
-						</tr>
-					</tbody>
-				</table><br/>
-				<!--Section for multiple questions-->
-				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
-					<table>
-						<thead>
-							<th></th>
-							<th>Agregar Respuestas</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>A<input type="text"/></td>
-								<td>B<input type="text"/></td>
-								<td>Respuesta Correcta</td>
-							</tr>
-							<tr>
-								<td>C<input type="text"/></td>
-								<td>D<input type="text"/></td>
-								<td>
-									A<input type="radio" name="radioCorrectAnswer" value="A"/>
-									B<input type="radio" name="radioCorrectAnswer" value="B"/>
-									C<input type="radio" name="radioCorrectAnswer" value="C"/>
-									D<input type="radio" name="radioCorrectAnswer" value="D"/>
 								</td>
-								<td><input type="button" value="Enviar Pregunta"/></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<!--Section for multiple questions-->
+				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
+					<form class="" action="index.html" method="post">
+						<table>
+							<thead>
+								<tr>
+									<th>Parcial</th>
+									<th>Pregunta</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
+											<option value="1">1er</option>
+											<option value="2">2do</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table>
+							<thead>
+								<th>Agregar Respuestas</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>A<input type="text"/></td>
+									<td>B<input type="text"/></td>
+									<td>Respuesta Correcta</td>
+								</tr>
+								<tr>
+									<td>C<input type="text"/></td>
+									<td>D<input type="text"/></td>
+									<td>
+										A<input type="radio" name="radioCorrectAnswer" value="A"/>
+										B<input type="radio" name="radioCorrectAnswer" value="B"/>
+										C<input type="radio" name="radioCorrectAnswer" value="C"/>
+										D<input type="radio" name="radioCorrectAnswer" value="D"/>
+									</td>
+									<td><input type="button" value="Enviar Pregunta"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<!--Section for multiple questions-->
+				<!--editing this section-->
+			</div>
 			</div>
 			<!--Module to add questions to subject-->
 
