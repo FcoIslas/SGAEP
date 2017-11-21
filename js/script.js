@@ -8,9 +8,9 @@ function showQuestionType(str){
       document.getElementById('hideTypeOpenButton').style.display = 'none';
       document.getElementById('thQuestionTypeOpen').style.display = 'none';
       break;
-      case "multipleOptions":
+    case "multipleOptions":
         alert("Multiple");
-        break;
+      break;
     case "openQuestion":
       document.getElementById('hideTypeOpen').style.display = 'block';
       document.getElementById('hideTypeOpenButton').style.display = 'block';
