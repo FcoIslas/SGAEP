@@ -37,7 +37,7 @@
 					<tr>
 						<td><label>Materia</label></td>
 						<td>
-							<select name="formConsultSubjectToCheck" onchange="showUser(this.value)">
+							<select name="formConsultSubjectToCheck" id="formConsultSubjectToCheck" onchange="showUser(this.value)">
 								<option value="">Seleccione Materia</option>
 								<?php
 									//ACCESS TO DATABASE
@@ -73,10 +73,7 @@
 							<th id="thQuestionTypeOpen" style="display: none;">Respuesta</th>
 						</tr>
 					</thead>
-					<!--LA COMIDA VA AQUÍ-->
-					<form name="formUpdateQuestionBank" method="post" action="Actions/actionAddQuestion.php">
-					</form>
-					<!--LA COMIDA VA AQUÍ-->
+
 					<tbody>
 						<tr>
 							<td>
@@ -85,7 +82,8 @@
 									<option value="2">2do</option>
 								</select>
 							</td>
-							<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td> <!--Textbox new answer-->
+							<!--Textbox new answer-->
+							<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td>
 							<td>
 								<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
 									<option value="">Seleccione Opción</option>
@@ -104,7 +102,14 @@
 									</select>
 								</div>
 								<div class="hideTypeOpen" id="hideTypeOpen" style="display: none;">
-									<input type="text" name="textInputOpen">
+									<!--Form to send only open question to DB-->
+									<form class="formOpenQuestion" id="formOpenQuestion" action="ajaxSendQuestionDB.php" method="post">
+										<input type="text" name="textInputQuestionID" id="textInputQuestionID" style="display: none;"/>
+										<input type="text" name="textInputSubjectID" id="textInputSubjectID" style="display: none;"/>
+										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" />
+										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion" ><!--onclick="submitOpenQuestion()"-->
+									</form>
+									<!--Form to send only open question to DB-->
 								</div>
 								<!--Hidden Inputs for Answers-->
 							</td>
@@ -113,15 +118,18 @@
 								<div class="hideTypeBooleanButton" id="hideTypeBooleanButton" style="display: none;">
 									<input type="submit" value="Enviar Pregunta">
 								</div>
+								<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
 								<div class="hideTypeOpenButton" id="hideTypeOpenButton" style="display: none;">
-									<input type="submit" value="Enviar Pregunta">
+									<!--<input type="submit" value="Enviar Pregunta" onclick="submitOpenQuestion()">-->
+									<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
 								</div>
+								<!--HERE IS A BUG, THE ERROR IS THAT IF YOU TAKEOFF THIS DIV id="hideTypeOpenButton" IT START TO CRASH-->
 								<!--Hidden Buttons for Answers-->
 							</td>
 						</tr>
 					</tbody>
 				</table><br/>
-				<!--In Construction the new tr for multiple questions-->
+				<!--Section for multiple questions-->
 				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
 					<table>
 						<thead>
@@ -137,13 +145,18 @@
 							<tr>
 								<td>C<input type="text"/></td>
 								<td>D<input type="text"/></td>
-								<td><input type="text"/></td>
-								<td><input type="button" value="Agregar Pregunta"/></td>
+								<td>
+									A<input type="radio" name="radioCorrectAnswer" value="A"/>
+									B<input type="radio" name="radioCorrectAnswer" value="B"/>
+									C<input type="radio" name="radioCorrectAnswer" value="C"/>
+									D<input type="radio" name="radioCorrectAnswer" value="D"/>
+								</td>
+								<td><input type="button" value="Enviar Pregunta"/></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<!--In Construction the new tr for multiple questions-->
+				<!--Section for multiple questions-->
 			</div>
 			<!--Module to add questions to subject-->
 

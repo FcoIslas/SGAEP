@@ -1,6 +1,7 @@
 function showQuestionType(str){
   switch (str) {
     case "booleanQuestion":
+      //show the inputs for Boolean questions
       document.getElementById('hideTypeBoolean').style.display = 'block';
       document.getElementById('hideTypeBooleanButton').style.display = 'block';
       document.getElementById('thQuestionTypeBoolean').style.display = 'block';
@@ -10,6 +11,7 @@ function showQuestionType(str){
       document.getElementById("hydeTypeMultiple").style.display = 'none';
       break;
     case "multipleOptions":
+      //show the inputs for Multiple questions
       document.getElementById("hydeTypeMultiple").style.display = 'block';
       document.getElementById('hideTypeBoolean').style.display = 'none';
       document.getElementById('hideTypeBooleanButton').style.display = 'none';
@@ -19,6 +21,7 @@ function showQuestionType(str){
       document.getElementById('thQuestionTypeOpen').style.display = 'none';
       break;
     case "openQuestion":
+      //show the inputs for Open questions
       document.getElementById('hideTypeOpen').style.display = 'block';
       document.getElementById('hideTypeOpenButton').style.display = 'block';
       document.getElementById('thQuestionTypeOpen').style.display = 'block';
@@ -26,8 +29,14 @@ function showQuestionType(str){
       document.getElementById('hideTypeBooleanButton').style.display = 'none';
       document.getElementById('thQuestionTypeBoolean').style.display = 'none';
       document.getElementById("hydeTypeMultiple").style.display = 'none';
-        break;
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = vcIdSubject+id;
+      document.getElementById('textInputQuestionID').value = vcIdQuestion;
+      break;
       case "":
+        //disappear the inputs for all type of questions
         document.getElementById('hideTypeOpen').style.display = 'none';
         document.getElementById('hideTypeOpenButton').style.display = 'none';
         document.getElementById('thQuestionTypeOpen').style.display = 'none';
@@ -71,7 +80,6 @@ function generateSubjectID(){
 	var inputNameSubject = document.getElementById("inputAddSubjectName");
 	var errorName = inputNameSubject.value;
 	var errorName = errorName.replace(/[-'`~!@#$€%^&*()_|+=?;:'",.<>\{\}\[\]\\\/]/gi, '');
-	alert(errorName);
 	inputNameSubject.value = errorName;
 	//replace forbidden symbols on Subject Name
 	//generateID for DB
