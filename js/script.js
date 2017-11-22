@@ -5,12 +5,22 @@ function showQuestionType(str){
       document.getElementById('hideTypeBoolean').style.display = 'block';
       document.getElementById('hideTypeOpen').style.display = 'none';
       document.getElementById("hydeTypeMultiple").style.display = 'none';
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textBooleanInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = id+vcIdSubject;
+      document.getElementById('textBooleanInputQuestionID').value = vcIdQuestion;
       break;
     case "multipleOptions":
       //show the inputs for Multiple questions
       document.getElementById("hydeTypeMultiple").style.display = 'block';
       document.getElementById('hideTypeBoolean').style.display = 'none';
       document.getElementById('hideTypeOpen').style.display = 'none';
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textMultipleInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = id+vcIdSubject;
+      document.getElementById('textMultipleInputQuestionID').value = vcIdQuestion;
       break;
     case "openQuestion":
       //show the inputs for Open questions
@@ -20,7 +30,7 @@ function showQuestionType(str){
       var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
       document.getElementById('textInputSubjectID').value = vcIdSubject;
       var id = Math.floor(Math.random()*1000000);
-      var vcIdQuestion = vcIdSubject+id;
+      var vcIdQuestion = id+vcIdSubject;
       document.getElementById('textInputQuestionID').value = vcIdQuestion;
       break;
     case "":

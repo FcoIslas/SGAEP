@@ -104,10 +104,10 @@
 										<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
 									</td>
 									<td>
-										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" />
+										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" required="required"/>
 									</td>
 									<td>
-										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion" ><!--onclick="submitOpenQuestion()"-->
+										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion">
 									</td>
 									<td>
 										<input type="text" name="textInputQuestionID" id="textInputQuestionID" style="display: none;"/>
@@ -120,42 +120,12 @@
 					<!--Form to send only open question to DB-->
 				</div>
 				<div class="hideTypeBoolean" id="hideTypeBoolean" style="display: none;">
-					<table class="tableBooleanQuestion" id="tableBooleanQuestion">
-						<thead>
-							<th>Parcial</th>
-							<th>Pregunta</th>
-							<th>Respuesta</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
-										<option value="1">1er</option>
-										<option value="2">2do</option>
-									</select>
-								</td>
-								<td>
-									<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
-								</td>
-								<td>
-									<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
-										<option value="1">Verdadero</option>
-										<option value="0">Falso</option>
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!--Section for multiple questions-->
-				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
-					<form class="" action="index.html" method="post">
-						<table>
+					<form class="formAddBooleanQuestion" id="formAddBooleanQuestion" action="phpAddBooleanQuestion.php" method="post">
+						<table class="tableBooleanQuestion" id="tableBooleanQuestion">
 							<thead>
-								<tr>
-									<th>Parcial</th>
-									<th>Pregunta</th>
-								</tr>
+								<th>Parcial</th>
+								<th>Pregunta</th>
+								<th>Respuesta</th>
 							</thead>
 							<tbody>
 								<tr>
@@ -166,7 +136,49 @@
 										</select>
 									</td>
 									<td>
-										<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
+										<input type="text" name="formUpdateBooleanQuestionBankQuestion" id="formUpdateBooleanQuestionBankQuestion" required="required">
+									</td>
+									<td>
+										<select name="formUpdateBooleanQuestionBankAnswer" id="formUpdateBooleanQuestionBankAnswer" >
+											<option value="1">Verdadero</option>
+											<option value="0">Falso</option>
+										</select>
+									</td>
+									<td>
+										<input type="submit" name="buttonAddBooleanQuestion" value="Enviar Pregunta">
+									</td>
+									<td>
+										<input type="text" name="textBooleanInputQuestionID" id="textBooleanInputQuestionID" style="display: none;"/><!--style="display: none;"-->
+										<input type="text" name="textBooleanInputSubjectID" id="textBooleanInputSubjectID" style="display: none;"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<!--Section for multiple questions-->
+
+				<!--DEveloping this section for Multiple-->
+
+				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
+					<form class="formMultipleQuestion" action="phpAddMultpleQuestion.php" id="formMultipleQuestion" method="post">
+						<table>
+							<thead>
+								<tr>
+									<th>Parcial</th>
+									<th>Pregunta</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="formUpdateMultipleQuestionBankPartial" id="formUpdateMultipleQuestionBankPartial" >
+											<option value="1">1er</option>
+											<option value="2">2do</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" name="formUpdateMultipleQuestionBankQuestion" id="formUpdateMultipleQuestionBankQuestion" required="required">
 									</td>
 								</tr>
 							</tbody>
@@ -177,20 +189,26 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td>A<input type="text"/></td>
-									<td>B<input type="text"/></td>
+									<td>A<input type="text" name="inputTextMultipleOptionA" id="inputTextMultipleOptionA" required="required"/></td>
+									<td>B<input type="text" name="inputTextMultipleOptionB" id="inputTextMultipleOptionB" required="required"/></td>
 									<td>Respuesta Correcta</td>
 								</tr>
 								<tr>
-									<td>C<input type="text"/></td>
-									<td>D<input type="text"/></td>
+									<td>C<input type="text" name="inputTextMultipleOptionC" id="inputTextMultipleOptionC" required="required"/></td>
+									<td>D<input type="text" name="inputTextMultipleOptionD" id="inputTextMultipleOptionD" required="required"/></td>
 									<td>
-										A<input type="radio" name="radioCorrectAnswer" value="A"/>
-										B<input type="radio" name="radioCorrectAnswer" value="B"/>
-										C<input type="radio" name="radioCorrectAnswer" value="C"/>
-										D<input type="radio" name="radioCorrectAnswer" value="D"/>
+
+											A<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerA"  required="required" value="A" />
+											B<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerB"  required="required" value="B" />
+											C<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerC"  required="required" value="C" />
+											D<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerD"  required="required" value="D" />
+
 									</td>
-									<td><input type="button" value="Enviar Pregunta"/></td>
+									<td>
+										<input type="text" name="textMultipleInputQuestionID" id="textMultipleInputQuestionID" style="display: none;"/><!--style="display: none;"-->
+										<input type="text" name="textMultipleInputSubjectID" id="textMultipleInputSubjectID" style="display: none;"/>
+									</td>
+									<td><input type="submit" value="Enviar Pregunta"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -200,7 +218,12 @@
 				<!--editing this section-->
 			</div>
 			</div>
+
+
+			<!--Developing this section for Multiple-->
 			<!--Module to add questions to subject-->
+
+			<div class="showAddedQuestions" id="showAddedQuestions"></div>
 
 		</section>
 
