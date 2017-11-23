@@ -228,7 +228,7 @@
 		</section>
 
 		<footer>
-			<p>Hecho en México, Universidad Nacional Autónoma de México (UNAM), todos los derechos reservados 2015.</p>
+			<p>Hecho en México, Universidad Nacional Autónoma de México (UNAM), todos los derechos reservados 2017.</p>
 			<p>Esta página puede ser reproducida con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica.</p>
 			<p>De otra forma, requiere permiso previo por escrito de la institución.</p>
 			<div id="dFooter">
@@ -237,7 +237,7 @@
 					<ul class="ulFooter"><a href="#">Conoce el portal</a></ul>
 				</li>
 			</div><br><br>
-			<p>Última actualización: 11/12/2015</p>
+			<p>Última actualización: 22/11/2017</p>
 		</footer>
 	</body>
 </html>
