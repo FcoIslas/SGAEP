@@ -29,30 +29,92 @@
     echo "<tr><td>Semestre</td><td><input type='text' value=".$row['intSemester']." readonly/></td></tr>";
     echo "</table>";
   }
-  //get the data of the subject
+
+
+  //GET the boolean questions for the subject
   echo "<h3>Preguntas Verdadero/Falso</h3>";
   echo "<table>";
-  echo "<tr><th>intParcial</th><th>ltQuestion</th><th>boolAnswer</th></tr>";
+  echo "<tr><th>Parcial</th><th>Pregunta</th><th>Respuesta Correcta</th></tr>";
   if (!$con) {
       die(mysql_error());
   }
   mysql_select_db("sgaep");
   //get the data of the subject
-  echo "SELECT intParcial,ltQuestion,boolAnswer FROM tableBooleanQuestions JOIN tableQuestions ON tableQuestions.vcIdQuestion = tableBooleanQuestions.vcIdQuestion WHERE tableQuestions.vcIdQuestion = '".$q."'";
-  $result2 = mysql_query("SELECT intParcial,ltQuestion,boolAnswer FROM tableBooleanQuestions JOIN tableQuestions ON tableQuestions.vcIdQuestion = tableBooleanQuestions.vcIdQuestion WHERE tableQuestions.vcIdQuestion = '".$q."'");
+  $result2 = mysql_query("SELECT * FROM tableQuestions WHERE vcIdSubject = '".$q."'");
   while ($row = mysql_fetch_array($result2)) {
-    echo "<tr><td><input type='text' value='".$row['intParcial']."' readonly/></td>";
-    echo "<td><input type='text' value='".$row['ltQuestion']."' readonly/></td>";
-    if ($row['boolAnser'] == 1){
-      $booleanAnswer = 'Verdad';
-    }else{
-      $booleanAnswer = 'Falso';
+    $result3 = mysql_query("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$row['vcIdQuestion']."'");
+    while ($row2 = mysql_fetch_array($result3)) {
+      echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
+      if ($row2["boolAnswer"] == 1) {
+        echo "<td><input type='text' value='Verdadero' readonly/></td>";
+      }else {
+        echo "<td><input type='text' value='Falso' readonly/></td>";
+      }
     }
-    echo "<td><input type='text' value='".$booleanAnswer."' readonly/></td></tr>";
-
+    echo "</tr>";
   }
   echo "</table>";
-  //get the questions of the subject
+  //GET the booblean questions for selected Subject
+
+  //GET the Open Questions for selected subject
+  echo "<br><br>";
+  echo "<h3>Preguntas Abiertas</h3>";
+  echo "<table>";
+  echo "<tr><th>Parcial</th><th>Pregunta</th><th>Respuesta Correcta</th></tr>";
+  if (!$con) {
+      die(mysql_error());
+  }
+  mysql_select_db("sgaep");
+  //get the data of the subject
+  $result2 = mysql_query("SELECT * FROM tableQuestions WHERE vcIdSubject = '".$q."'");
+  while ($row = mysql_fetch_array($result2)) {
+    $result3 = mysql_query("SELECT * FROM tableOpenQuestions WHERE vcIdQuestion = '".$row['vcIdQuestion']."'");
+    while ($row2 = mysql_fetch_array($result3)) {
+      echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td>";
+    }
+    echo "</tr>";
+  }
+  echo "</table>";
+  //GET the Open Questions for selected subject
+
+  //Get the Multiple questions for selected subject
+  echo "<br><br>";
+  echo "<h3>Preguntas Opción Múltiple</h3>";
+  echo "<table>";
+  echo "<tr>
+          <th>Parcial</th>
+          <th>Pregunta</th>
+          <th>Opción A</th>
+          <th>Opción B</th>
+          <th>Opción C</th>
+          <th>Opción D</th>
+          <th>Respuesta Correcta</th>
+          </tr>";
+  if (!$con) {
+      die(mysql_error());
+  }
+  mysql_select_db("sgaep");
+  //get the data of the subject
+  $result2 = mysql_query("SELECT * FROM tableQuestions WHERE vcIdSubject = '".$q."'");
+  while ($row = mysql_fetch_array($result2)) {
+    $result3 = mysql_query("SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$row['vcIdQuestion']."'");
+    while ($row2 = mysql_fetch_array($result3)) {
+      echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswerA"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswerB"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswerC"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswerD"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["vcCorrectAnswer"]."' readonly/></td>";
+    }
+    echo "</tr>";
+  }
+  echo "</table>";
+  //Get the Multiple questions for selected subject
+
   //get the questions of the subject
 
 ?>
