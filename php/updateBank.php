@@ -29,130 +29,206 @@
 			</nav>
 		</header>
 		<section>
+
+			<!--Section to show the subject-->
 			<div id="moduleConsultSubject">
-				<form name="formConsultSubject" id="formConsultSubject" class="formConsultSubject" method="post" action="">
-					<table>
-						<td><th>Datos</th></td>
-						<tr>
-							<td><label>Materia</label></td>
-							<td>
-								<select name="formConsultSubjectToCheck" onchange="showUser(this.value)">
-									<?php
-										//ACCESS TO DATABASE
-										session_start();
-										$link = mysql_connect('localhost', 'root', 'dwarfest')
-    									or die('No se pudo conectar: ' . mysql_error());
-										mysql_select_db('sgaep') or die('No se pudo seleccionar la base de datos');
-
-										//READ DATABASE
-										$results = mysql_query("SELECT * FROM tableSubjects WHERE vcRFC='".$_SESSION["vcRFC"]."'");
-										while ($row = mysql_fetch_array($results)) {
-											echo "<option value='".$row["vcIdSubject"]."'>".$row["vcSubjectName"]."</option>";
-										}
-									?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-								<td>
-									<!--AJAX Section, get the values of the Subject-->
-
-									<!--AJAX Section, get the values of the Subject-->
-								</td>
-						</tr>
-						<tr hidden="hidden"><td><label>UserType</label></td><td><input type="number" name="formConsultSubjectType" value="1"></td></tr>
-					</table><br/>
-					<div id="txtHint" class="">
-
-					</div>
-				</form><br/>
+				<table id="tableShowSubjectsAJAX">
+					<td><th>Datos</th></td>
+					<tr>
+						<td><label>Materia</label></td>
+						<td>
+							<select name="formConsultSubjectToCheck" id="formConsultSubjectToCheck" onchange="showSubject(this.value)">
+								<option value="">Seleccione Materia</option>
+								<?php
+									//ACCESS TO DATABASE
+									session_start();
+									$link = mysql_connect('localhost', 'root', 'dwarfest')
+    								or die('No se pudo conectar: ' . mysql_error());
+									mysql_select_db('sgaep') or die('No se pudo seleccionar la base de datos');
+									//READ DATABASE
+									$results = mysql_query("SELECT * FROM tableSubjects WHERE vcRFC='".$_SESSION["vcRFC"]."'");
+									while ($row = mysql_fetch_array($results)) {
+										echo "<option value='".$row["vcIdSubject"]."'>".$row["vcSubjectName"]."</option>";
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+				</table><br/>
+				<!--AJAX Section, get the values of the Subject-->
+				<div id="txtHint" class=""></div>
+				<!--AJAX Section, get the values of the Subject-->
 			</div>
+			<!--Section to show the subject-->
+
+			<!--Module to add questions to subject-->
+			<div class="addQuestionToSubject" id="addQuestionToSubject" style="display: none;">
+
+
 			<div id="moduleConsultSubjectQuestions">
 				<table id="tableDeleteUsers">
-						<thead>
-							<tr>
+						<tr>
+							<th>Tipo de Pregunta</th>
+						</tr>
+						<tr>
+							<td>
+								<select class="selectQuestionType" name="selectQuestionType" onchange="showQuestionType(this.value)">
+									<option value="">Seleccione Opción</option>
+									<option value="booleanQuestion">Verdadero o Falso</option>
+									<option value="multipleOptions">Opción Múltiple</option>
+									<option value="openQuestion">Pregunta Abierta</option>
+								</select>
+							</td>
+							<!--Hidding-->
+						</tr>
+				</table>
+				<!--editing this section-->
+				<div class="hideTypeOpen" id="hideTypeOpen" style="display: none;">
+					<!--Form to send only open question to DB-->
+					<form class="formOpenQuestion" id="formOpenQuestion" action="ajaxSendQuestionDB.php" method="post">
+						<table>
+							<thead>
 								<th>Parcial</th>
 								<th>Pregunta</th>
 								<th>Respuesta</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-								if(isset($_POST["buttonSubtmit"])){
-									$connect = mysql_connect("localhost","root","dwarfest");
-									if(!$connect){
-										die(mysql_error());
-									}
-									mysql_select_db("sgaep");
-									//Stock this variables to add the info to the database
-									$_SESSION["vcSubjectChecked"] = $_POST["formConsultSubjectToCheck"];
-									$_SESSION["intSubjectSemesterCheked"] = $_POST["formConsultSubjectSemester"];
-									$_SESSION["vcIdSubject"] = $_SESSION["vcRFC"].$_SESSION["vcSubjectChecked"].$_SESSION["intSubjectSemesterCheked"];
-									//echo "<h1>Hola ".$_SESSION["vcIdSubject"]."</h1>Hola ";
-									//stock this variables to add the info to the database
-									//Show the subject that we are modifying
-									/*$results2 = mysql_query("SELECT * FROM tableUsers WHERE vcIdSubject='".$_SESSION["vcIdSubject"]."'");
-									while($row2 = mysql_fetch_array($results2)){
-										echo "Materia: ".$row2["vcSubjectName"]."<br/>";
-										echo "Carrera: ".$row2["vcSubjectCareer"]."<br/>";
-										if ($row2["intTurn"]=='') {
-											echo "Turno: <br/>";
-										}elseif ($row2["intTurn"]=='1') {
-											echo "Turno: Matutino<br/>";
-										}else{
-											echo "Turno: Vespertino<br/>";
-										}
-										echo "Semestre: ".$row2["intSemester"]."<br/>";
-										}*/
-									//Show the subject that we are modifying
-									$results = mysql_query("SELECT * FROM tableQuestions WHERE vcRFC='".$_SESSION["vcRFC"]."' AND vcIdSubject='".$_SESSION["vcRFC"].$_POST["formConsultSubjectToCheck"].$_POST["formConsultSubjectSemester"]."'");
-									while ($row = mysql_fetch_array($results)) {
-							?>
-							<tr>
-								<td><?php echo $row["intParcial"]?></td>
-								<td><?php echo $row["ltQuestion"]?></td>
-								<td>
-									<?php
-										if($row["bAnswer"]==1){
-											echo "Verdadero";
-										}else{
-											echo "Falso";
-										}
-									?>
-								</td>
-							</tr>
-							<?php
-									}
-								}
-							?>
-							<tr>
-								<form name="formUpdateQuestionBank" method="post" action="Actions/actionAddQuestion.php">
+							</thead>
+							<tbody>
+								<tr>
 									<td>
 										<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
-											<option value="1">1ero</option>
+											<option value="1">1er</option>
 											<option value="2">2do</option>
 										</select>
 									</td>
-									<td><input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required"></td> <!--Textbox new answer-->
 									<td>
-										<select name="formUpdateQuestionBankAnswer" id="formUpdateQuestionBankAnswer" >
-											<option>
-												<option value="1">Verdadero</option>
-												<option value="0">Falso</option>
-											</option>
+										<input type="text" name="formUpdateQuestionBankQuestion" id="formUpdateQuestionBankQuestion" required="required">
+									</td>
+									<td>
+										<input type="text" name="textInputAnswerOpen" id="textInputAnswerOpen" required="required"/>
+									</td>
+									<td>
+										<input type="submit" value="Enviar Pregunta" id="buttonSubmitOpenQuestion">
+									</td>
+									<td>
+										<input type="text" name="textInputQuestionID" id="textInputQuestionID" style="display: none;"/>
+										<input type="text" name="textInputSubjectID" id="textInputSubjectID" style="display: none;"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+					<!--Form to send only open question to DB-->
+				</div>
+				<div class="hideTypeBoolean" id="hideTypeBoolean" style="display: none;">
+					<form class="formAddBooleanQuestion" id="formAddBooleanQuestion" action="phpAddBooleanQuestion.php" method="post">
+						<table class="tableBooleanQuestion" id="tableBooleanQuestion">
+							<thead>
+								<th>Parcial</th>
+								<th>Pregunta</th>
+								<th>Respuesta</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="formUpdateQuestionBankPartial" id="formUpdateQuestionBankPartial" >
+											<option value="1">1er</option>
+											<option value="2">2do</option>
 										</select>
 									</td>
 									<td>
-										<input type="submit">
+										<input type="text" name="formUpdateBooleanQuestionBankQuestion" id="formUpdateBooleanQuestionBankQuestion" required="required">
 									</td>
-								</form>
-							</tr>
-						</tbody>
-					</table><br/>
+									<td>
+										<select name="formUpdateBooleanQuestionBankAnswer" id="formUpdateBooleanQuestionBankAnswer" >
+											<option value="1">Verdadero</option>
+											<option value="0">Falso</option>
+										</select>
+									</td>
+									<td>
+										<input type="submit" name="buttonAddBooleanQuestion" value="Enviar Pregunta">
+									</td>
+									<td>
+										<input type="text" name="textBooleanInputQuestionID" id="textBooleanInputQuestionID" style="display: none;"/><!--style="display: none;"-->
+										<input type="text" name="textBooleanInputSubjectID" id="textBooleanInputSubjectID" style="display: none;"/>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<!--Section for multiple questions-->
+
+				<!--DEveloping this section for Multiple-->
+
+				<div class="hydeTypeMultiple" id="hydeTypeMultiple" style="display: none;">
+					<form class="formMultipleQuestion" action="phpAddMultpleQuestion.php" id="formMultipleQuestion" method="post">
+						<table>
+							<thead>
+								<tr>
+									<th>Parcial</th>
+									<th>Pregunta</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="formUpdateMultipleQuestionBankPartial" id="formUpdateMultipleQuestionBankPartial" >
+											<option value="1">1er</option>
+											<option value="2">2do</option>
+										</select>
+									</td>
+									<td>
+										<input type="text" name="formUpdateMultipleQuestionBankQuestion" id="formUpdateMultipleQuestionBankQuestion" required="required">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table>
+							<thead>
+								<th>Agregar Respuestas</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>A<input type="text" name="inputTextMultipleOptionA" id="inputTextMultipleOptionA" required="required"/></td>
+									<td>B<input type="text" name="inputTextMultipleOptionB" id="inputTextMultipleOptionB" required="required"/></td>
+									<td>Respuesta Correcta</td>
+								</tr>
+								<tr>
+									<td>C<input type="text" name="inputTextMultipleOptionC" id="inputTextMultipleOptionC" required="required"/></td>
+									<td>D<input type="text" name="inputTextMultipleOptionD" id="inputTextMultipleOptionD" required="required"/></td>
+									<td>
+
+											A<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerA"  required="required" value="A" />
+											B<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerB"  required="required" value="B" />
+											C<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerC"  required="required" value="C" />
+											D<input type="radio" name="radioCorrectAnswer"  id="radioCorrectAnswerD"  required="required" value="D" />
+
+									</td>
+									<td>
+										<input type="text" name="textMultipleInputQuestionID" id="textMultipleInputQuestionID" style="display: none;"/><!--style="display: none;"-->
+										<input type="text" name="textMultipleInputSubjectID" id="textMultipleInputSubjectID" style="display: none;"/>
+									</td>
+									<td><input type="submit" value="Enviar Pregunta"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<!--Section for multiple questions-->
+				<!--editing this section-->
 			</div>
+			</div>
+
+
+			<!--Developing this section for Multiple-->
+			<!--Module to add questions to subject-->
+
+			<div class="showAddedQuestions" id="showAddedQuestions"></div>
+
 		</section>
+
 		<footer>
-			<p>Hecho en México, Universidad Nacional Autónoma de México (UNAM), todos los derechos reservados 2015.</p>
+			<p>Hecho en México, Universidad Nacional Autónoma de México (UNAM), todos los derechos reservados 2017.</p>
 			<p>Esta página puede ser reproducida con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica.</p>
 			<p>De otra forma, requiere permiso previo por escrito de la institución.</p>
 			<div id="dFooter">
@@ -161,7 +237,7 @@
 					<ul class="ulFooter"><a href="#">Conoce el portal</a></ul>
 				</li>
 			</div><br><br>
-			<p>Última actualización: 11/12/2015</p>
+			<p>Última actualización: 22/11/2017</p>
 		</footer>
 	</body>
 </html>

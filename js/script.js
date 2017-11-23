@@ -1,8 +1,81 @@
-function showUser(str) {
+function showSubjectQuestions(str){
+  //AJAX Section, get the values of the Subject
+  str = encodeURI(str);
+   if (str=="") {
+       document.getElementById("showSubjectQuestions").innerHTML = "";
+       alert("Seleccione Materia");
+       return;
+   } else {
+       if (window.XMLHttpRequest) {
+           // code for IE7+, Firefox, Chrome, Opera, Safari
+           xmlhttp = new XMLHttpRequest();
+       } else {
+           // code for IE6, IE5
+           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       xmlhttp.onreadystatechange = function() {
+           if (this.readyState == 4 && this.status == 200) {
+               document.getElementById("showSubjectQuestions").innerHTML = this.responseText;
+           }
+       };
+       xmlhttp.open("GET","AJAXConsultQuestionsSubjects.php?q="+str,true);
+       xmlhttp.send();
+   }
+}
+function showQuestionType(str){
+  switch (str) {
+    case "booleanQuestion":
+      //show the inputs for Boolean questions
+      document.getElementById('hideTypeBoolean').style.display = 'block';
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textBooleanInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = id+vcIdSubject;
+      document.getElementById('textBooleanInputQuestionID').value = vcIdQuestion;
+      break;
+    case "multipleOptions":
+      //show the inputs for Multiple questions
+      document.getElementById("hydeTypeMultiple").style.display = 'block';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textMultipleInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = id+vcIdSubject;
+      document.getElementById('textMultipleInputQuestionID').value = vcIdQuestion;
+      break;
+    case "openQuestion":
+      //show the inputs for Open questions
+      document.getElementById('hideTypeOpen').style.display = 'block';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
+      var vcIdSubject = document.getElementById('formConsultSubjectToCheck').value;
+      document.getElementById('textInputSubjectID').value = vcIdSubject;
+      var id = Math.floor(Math.random()*1000000);
+      var vcIdQuestion = id+vcIdSubject;
+      document.getElementById('textInputQuestionID').value = vcIdQuestion;
+      break;
+    case "":
+      //disappear the inputs for all type of questions
+      document.getElementById('hideTypeOpen').style.display = 'none';
+      document.getElementById('hideTypeBoolean').style.display = 'none';
+      document.getElementById("hydeTypeMultiple").style.display = 'none';
+      alert("Seleccione Tipo de Pregunta");
+      break;
+    default:
+        alert("Seleccione una opción");
+          break;
+  }
+}
+function showSubject(str) {
 	//AJAX Section, get the values of the Subject
   str = encodeURI(str);
    if (str=="") {
        document.getElementById("txtHint").innerHTML = "";
+       document.getElementById("addQuestionToSubject").style.display = 'none';
+       alert("Seleccione Materia");
        return;
    } else {
        if (window.XMLHttpRequest) {
@@ -20,6 +93,7 @@ function showUser(str) {
        xmlhttp.open("GET","ajaxConDB.php?q="+str,true);
        xmlhttp.send();
    }
+  document.getElementById("addQuestionToSubject").style.display = 'block';
 }
 
 function generateSubjectID(){
@@ -27,7 +101,6 @@ function generateSubjectID(){
 	var inputNameSubject = document.getElementById("inputAddSubjectName");
 	var errorName = inputNameSubject.value;
 	var errorName = errorName.replace(/[-'`~!@#$€%^&*()_|+=?;:'",.<>\{\}\[\]\\\/]/gi, '');
-	alert(errorName);
 	inputNameSubject.value = errorName;
 	//replace forbidden symbols on Subject Name
 	//generateID for DB
