@@ -1,3 +1,31 @@
+function showSubjectCreateExam(str) {
+	//AJAX Section, get the values of the Subject
+  str = encodeURI(str);
+   if (str=="") {
+       document.getElementById("txtHint").innerHTML = "";
+       document.getElementById("addQuestionToSubject").style.display = 'none';
+       alert("Seleccione Materia");
+       return;
+   } else {
+       if (window.XMLHttpRequest) {
+           // code for IE7+, Firefox, Chrome, Opera, Safari
+           xmlhttp = new XMLHttpRequest();
+       } else {
+           // code for IE6, IE5
+           xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+       }
+       xmlhttp.onreadystatechange = function() {
+           if (this.readyState == 4 && this.status == 200) {
+               document.getElementById("txtHint").innerHTML = this.responseText;
+           }
+       };
+       xmlhttp.open("GET","ajaxConDB.php?q="+str,true);
+       xmlhttp.send();
+   }
+  document.getElementById("inputCreateExameIdSubject").value = str;
+  document.getElementById("divSpecsForExam").style.display = 'block';
+}
+
 function showSubjectQuestions(str){
   //AJAX Section, get the values of the Subject
   str = encodeURI(str);
@@ -94,6 +122,7 @@ function showSubject(str) {
        xmlhttp.send();
    }
   document.getElementById("addQuestionToSubject").style.display = 'block';
+  //document.getElementById("divSpecsForExam").style.display = 'block';
 }
 
 function generateSubjectID(){
