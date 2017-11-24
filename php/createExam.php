@@ -7,6 +7,7 @@
 		<meta charset="utf-8">
 		<title>Sistema Generador Aleatorio de Exámenes Parciales</title>
 		<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+		<script type="text/javascript" src="../js/script.js"></script>
 	</head>
 	<body>
 		<header>
@@ -28,90 +29,57 @@
 			</nav>
 		</header>
 		<section>
-			<div id="moduleCreateExam">
-				<form name="formCreateExam" id="formCreateExam" class="formCreateExam" method="post" action="../Actions/actionCreateExam.php" target="_blank" target="_blank2">
-					<table>
+			<!--Section to show the subject-->
+			<div id="moduleConsultSubject">
+				<table id="tableShowSubjectsAJAX">
+					<td><th>Datos</th></td>
+					<tr>
+						<td><label>Materia</label></td>
 						<td>
-							<th>Datos</th>
+							<select name="formConsultSubjectToCheck" id="formConsultSubjectToCheck" onchange="showSubjectCreateExam(this.value)">
+								<option value="">Seleccione Materia</option>
+								<?php
+									//ACCESS TO DATABASE
+									session_start();
+									$link = mysql_connect('localhost', 'root', 'dwarfest')
+    								or die('No se pudo conectar: ' . mysql_error());
+									mysql_select_db('sgaep') or die('No se pudo seleccionar la base de datos');
+									//READ DATABASE
+									$results = mysql_query("SELECT * FROM tableSubjects WHERE vcRFC='".$_SESSION["vcRFC"]."'");
+									while ($row = mysql_fetch_array($results)) {
+										echo "<option value='".$row["vcIdSubject"]."'>".$row["vcSubjectName"]."</option>";
+									}
+								?>
+							</select>
 						</td>
-						<tr>
-							<td>
-								<label>Materia</label>
-							</td>
-							<td>
-								<select type="text" name="formCreateExamSubject" required="required">
-									<?php
-										//ACCESS TO DATABASE
-										session_start();
-										$link = mysql_connect('localhost', 'root', 'dwarfest')
-    									or die('No se pudo conectar: ' . mysql_error());
-										mysql_select_db('sgaep') or die('No se pudo seleccionar la base de datos');
-
-										//READ DATABASE
-										$results = mysql_query("SELECT * FROM tableSubjects WHERE vcRFC='".$_SESSION["vcRFC"]."'");
-										while ($row = mysql_fetch_array($results)) {
-											echo "<option value='".$row["vcSubjectName"]."'>".$row["vcSubjectName"]."</option>";
-										}
-									?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label>Carrera</label>
-							</td>
-							<td>
-								<select name="formCreateExamCareer">
-									<option value="Informática">Informática</option>
-									<option value="ITSE">ITSE</option>
-									<option value="IME">IME</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label>Parcial</label>
-							</td>
-							<td>
-								<select name="formCreateExamPartial">
-									<option value="1">1ero</option>
-									<option value="2">2do</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label>Semestre</label>
-							</td>
-							<td>
-								<select name="formCreateExamSemester">
-									<?php
-										for ($i=1; $i < 10; $i++) {
-											echo "<option value=".$i.">".$i."°</option>";
-										}
-									?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label>Número de Reactivos</label>
-							</td>
-							<td>
-								<select name="formCreateExamNumberQuestions">
-									<?php
-										for ($i=1; $i < 6; $i++) {
-											echo "<option value=".$i.">".$i."</option>";
-										}
-									?>
-								</select>
-							</td>
-						</tr>
-					</table><br/>
-					<input type="submit" value="Generar Examen">
-					<input type="reset" value="Limpiar">
-				</form>
+					</tr>
+				</table><br/>
+				<!--AJAX Section, get the values of the Subject-->
+				<div id="txtHint" class=""></div>
+				<!--AJAX Section, get the values of the Subject-->
 			</div>
+			<!--Section to show the subject-->
+
+			<!--Section to submit the specs for the creation of the exam-->
+			<!--Developing section-->
+			<div class="divSpecsForExam" id="divSpecsForExam" style="display: none;" ><!--style="display: none;"-->
+				<form class="formSpecsForExam" action="specsExam.php" method="post">
+					<input type="text" name="inputCreateExameIdSubject" id='inputCreateExameIdSubject' style="display: none;" readonly>
+					<label for="numberQuestions">Número de Preguntas</label>
+					<select class="selectNumberQuestions" name="selectNumberQuestions">
+						<?php
+							for ($i=1; $i < 11 ; $i++) {
+								echo "<option value='".$i."''>".$i."</option>";
+							}
+							?>
+						</select>
+						<input type="submit" name="submitButtonCreateExam" value="Crear Examen">
+					</form>
+			</div>
+			<!--Developing section-->
+			<!--Section to submit the specs for the creation of the exam-->
+
+
 		</section>
 		<footer>
 			<p>Hecho en México, Universidad Nacional Autónoma de México (UNAM), todos los derechos reservados 2017.</p>
@@ -127,4 +95,3 @@
 		</footer>
 	</body>
 </html>
-
