@@ -11,7 +11,7 @@
 		}
 		mysql_select_db("sgaep");
 	}
-	$sql="INSERT INTO tableQuestions (vcRFC,vcIdSubject,vcIdQuestion) VALUES ('".$_SESSION["vcRFC"]."','".$_POST["textInputSubjectID"]."','".$_POST["textInputQuestionID"]."')";
+	$sql="INSERT INTO tableQuestions (vcRFC,vcIdSubject,vcIdQuestion,intParcial) VALUES ('".$_SESSION["vcRFC"]."','".$_POST["textInputSubjectID"]."','".$_POST["textInputQuestionID"]."','".$_POST["formUpdateQuestionBankPartial"]."')";
 	$sql2="INSERT INTO tableOpenQuestions (vcIdQuestion,intParcial,ltQuestion,ltAnswer) VALUES ('".$_POST["textInputQuestionID"]."','".$_POST["formUpdateQuestionBankPartial"]."','".$_POST['formUpdateQuestionBankQuestion']."','".$_POST['textInputAnswerOpen']."')";
 	//echo($sql2);
 	mysql_query($sql);

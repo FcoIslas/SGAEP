@@ -65,14 +65,22 @@
 			<div class="divSpecsForExam" id="divSpecsForExam" style="display: none;" ><!--style="display: none;"-->
 				<form class="formSpecsForExam" action="specsExam.php" method="post">
 					<input type="text" name="inputCreateExameIdSubject" id='inputCreateExameIdSubject' style="display: none;" readonly>
-					<label for="numberQuestions">Número de Preguntas</label>
-					<select class="selectNumberQuestions" name="selectNumberQuestions">
+					<!--<label for="numberQuestions">Número de Preguntas</label>
+					<select class="selectNumberQuestions" name="selectNumberQuestions">-->
 						<?php
-							for ($i=1; $i < 11 ; $i++) {
-								echo "<option value='".$i."''>".$i."</option>";
-							}
+							//for ($i=1; $i < 11 ; $i++) {
+								//echo "<option value=".$i.">".$i."</option>";
+							//}
 							?>
+						<!--</select>
+						<br />-->
+						<label for="selectPartialNumber">Seleccionar Parcial</label>
+						<select class="selectPartialNumber" name="selectPartialNumber" id="selectPartialNumber">
+							<option value="0">General</option>
+							<option value="1">Primer Parcial</option>
+							<option value="2">Segundo Parcial</option>
 						</select>
+						<br>
 						<input type="submit" name="submitButtonCreateExam" value="Crear Examen">
 					</form>
 			</div>
