@@ -11,7 +11,7 @@
 		}
 		mysql_select_db("sgaep");
 	}
-	$sql="INSERT INTO tableQuestions (vcRFC,vcIdSubject,vcIdQuestion) VALUES ('".$_SESSION["vcRFC"]."','".$_POST["textMultipleInputSubjectID"]."','".$_POST["textMultipleInputQuestionID"]."')";
+	$sql="INSERT INTO tableQuestions (vcRFC,vcIdSubject,vcIdQuestion,intParcial) VALUES ('".$_SESSION["vcRFC"]."','".$_POST["textMultipleInputSubjectID"]."','".$_POST["textMultipleInputQuestionID"]."','".$_POST["formUpdateMultipleQuestionBankPartial"]."')";
 	$sql2="INSERT INTO tableMultipleQuestions (vcIdQuestion,intParcial,ltQuestion) VALUES ('".$_POST["textMultipleInputQuestionID"]."','".$_POST["formUpdateMultipleQuestionBankPartial"]."','".$_POST['formUpdateMultipleQuestionBankQuestion']."')";
 	$sql3="UPDATE tableMultipleQuestions SET ltAnswerA = '".$_POST["inputTextMultipleOptionA"]."', ltAnswerB = '".$_POST["inputTextMultipleOptionB"]."', ltAnswerC = '".$_POST["inputTextMultipleOptionC"]."', ltAnswerD = '".$_POST["inputTextMultipleOptionD"]."', vcCorrectAnswer = '".$_POST["radioCorrectAnswer"]."' WHERE vcIdQuestion = '".$_POST[textMultipleInputQuestionID]."'";
 	mysql_query($sql);
