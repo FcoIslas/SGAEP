@@ -32,7 +32,7 @@
 			<!--Section to show the subject-->
 			<div id="moduleConsultSubject">
 				<table id="tableShowSubjectsAJAX">
-					<td><th>Datos</th></td>
+					<td><th>Crear Examen</th></td>
 					<tr>
 						<td><label>Materia</label></td>
 						<td>

@@ -31,7 +31,7 @@
 		<section>
 			<div id="moduleConsultSubject">
 				<table>
-					<td><th>Datos</th></td>
+					<td><th>Consultar Banco de Preguntas</th></td>
 					<tr>
 						<td><label>Materia</label></td>
 						<td>
