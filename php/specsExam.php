@@ -7,10 +7,14 @@
   #Functions are added below
 
   //Main Section
+
+  //Variables to start program
   $secondArray = array();
   $mixedArrayVcIdQuestion = array();
   $vcIdSubject = $_POST['inputCreateExameIdSubject'];
   $selectPartialNumber = $_POST['selectPartialNumber'];
+  $selectedNumerQuestions = $_POST['selectNumberQuestions'];
+  //
   $topNumber = getMaxValueQuestions();
   $specIdMix = 'vcIdQuestion'; //Request get mixed vcIdQuestions for subject
   $mixedArrayVcIdQuestion = getMixedArray($vcIdSubject,$selectPartialNumber,$specIdMix);
@@ -18,13 +22,15 @@
   echo"<table>";
   echo"<thead>
         <th>Pregunta</th>
+        <th></th>
         <th>Respuesta</th>
       </thead>";
-  for ($i=0; $i < 10 ; $i++) {
+  for ($i=0; $i < $selectedNumerQuestions ; $i++) {
     //echo "<br>".$mixedArrayVcIdQuestion[$i];
-    printOpenQuestions($mixedArrayVcIdQuestion[$i]);
-    printBooleanQuestions($mixedArrayVcIdQuestion[$i]);
-    printMultipleQuestions($mixedArrayVcIdQuestion[$i]);
+    $examQuestionNumber = $i + 1;
+    printOpenQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
+    printBooleanQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
+    printMultipleQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
   }
   echo"</table>";
   //$varPrueba = printTableQuestionsNumbers($vcIdSubject,$selectPartialNumber);
@@ -166,15 +172,17 @@
       echo "</table>";
     }
   }
-  function printBooleanQuestions($vcIdQuestion){
+  function printBooleanQuestions($vcIdQuestion,$examQuestionNumber){
     connectSql();
     //GET the boolean questions for the subject
     //echo("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
     $result3 = mysql_query("SELECT intParcial,ltQuestion,boolAnswer FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
     //echo ("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
     while ($row2 = mysql_fetch_array($result3)) {
-      //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-      echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
+      if($row2 != ''){
+        echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
+      }
+      //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>"; Print Parcial
       if ($row2["boolAnswer"] == 1) {
         echo "<td>
                 <input type='radio' value='Verdadero' checked='checked' readonly/>Verdadero
@@ -184,32 +192,79 @@
         echo "<td>
                 <input type='radio' value='Verdadero' readonly/>Verdadero
                 <input type='radio' value='Falso' checked='checked' readonly/>Falso
-              </td></tr>";
+              </td></tr><tr><td></br></td></tr>";
       }
     }
   }
-  function printOpenQuestions($vcIdQuestion){
+  function printOpenQuestions($vcIdQuestion,$examQuestionNumber){
     //GET the Open Questions for selected subject
-      $result3 = mysql_query("SELECT intParcial,ltQuestion,ltAnswer FROM tableOpenQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
-      while ($row2 = mysql_fetch_array($result3)) {
-        //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td></tr>";
+    $result3 = mysql_query("SELECT intParcial,ltQuestion,ltAnswer FROM tableOpenQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
+    while ($row2 = mysql_fetch_array($result3)) {
+      if($row2 != ''){
+        echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
       }
+      //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td></tr></td></tr><tr><td></br></td></tr>";
+    }
   }
-  function printMultipleQuestions($vcIdQuestion){
+  function printMultipleQuestions($vcIdQuestion,$examQuestionNumber){
     //Get the Multiple questions for selected subject
       //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
       $result3 = mysql_query("SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
       //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
       while ($row2 = mysql_fetch_array($result3)) {
+        if($row2 != ''){
+          echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
+          //echo "<tr><td>".$examQuestionNumber.".-</td>";
+        }
         //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td></tr>";
+        //echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td></tr>";
         echo "<tr><td>A)<input type='text' value='".$row2["ltAnswerA"]."' readonly/></td>";
         echo "<td>B)<input type='text' value='".$row2["ltAnswerB"]."' readonly/></td></tr>";
         echo "<tr><td>C)<input type='text' value='".$row2["ltAnswerC"]."' readonly/></td>";
         echo "<td>D)<input type='text' value='".$row2["ltAnswerD"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["vcCorrectAnswer"]."' readonly/></td></tr>";
+        //echo "<td><input type='text' value='".$row2["vcCorrectAnswer"]."' readonly/></td></tr>";
+        switch ($row2["vcCorrectAnswer"]) {
+          case 'A':
+            echo "<td>";
+            echo "<input type='radio' value='A' checked='checked' readonly />A";
+            echo "<input type='radio' value='B' readonly />B";
+            echo "<input type='radio' value='C' readonly />C";
+            echo "<input type='radio' value='D' readonly />D";
+            echo "</td></tr>";
+            echo "<tr><td></br></td></tr>";
+            break;
+          case 'B':
+            echo "<td>";
+            echo "<input type='radio' value='A' readonly />A";
+            echo "<input type='radio' value='B' checked='checked' readonly />B";
+            echo "<input type='radio' value='C' readonly />C";
+            echo "<input type='radio' value='D' readonly />D";
+            echo "</td></tr>";
+            echo "<tr><td></br></td></tr>";
+            break;
+          case 'C':
+            echo "<td>";
+            echo "<input type='radio' value='A' readonly />A";
+            echo "<input type='radio' value='B' readonly />B";
+            echo "<input type='radio' value='C' checked='checked' readonly />C";
+            echo "<input type='radio' value='D' readonly />D";
+            echo "</td></tr>";
+            echo "<tr><td></br></td></tr>";
+            break;
+          case 'D':
+            echo "<td>";
+            echo "<input type='radio' value='A' readonly />A";
+            echo "<input type='radio' value='B' readonly />B";
+            echo "<input type='radio' value='C' readonly />C";
+            echo "<input type='radio' value='D' checked='checked' readonly />D";
+            echo "</td></tr>";
+            echo "<tr><td></br></td></tr>";
+            break;
+          default:
+            echo "Error";
+            break;
+        }
       }
   }
 ?>
