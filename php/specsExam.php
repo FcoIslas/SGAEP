@@ -7,14 +7,18 @@
   #Functions are added below
 
   //Main Section
-  $secondArray = array();
+  //Variables to start program
   $vcIdSubject = $_POST['inputCreateExameIdSubject'];
   $selectPartialNumber = $_POST['selectPartialNumber'];
+  $selectedNumerQuestions = $_POST['selectNumberQuestions'];
   $topNumber = getMaxValueQuestions();
-  $varPrueba = printTableQuestionsNumbers($vcIdSubject,$selectPartialNumber);
-  printTableQuestionsRandomId($varPrueba);
+  $specIdMix = 'vcIdQuestion'; //Request get mixed vcIdQuestions for subject
+  $examHeader = printExamHeader();
+  echo $examHeader;
+  printTablesforPDF($vcIdSubject,$selectPartialNumber,$specIdMix,$selectedNumerQuestions);
   //Main section
 
+  //Here start the functions
   function connectSql(){
     //Objective: Connect one to the database sgaep
     $con = mysql_connect("localhost","root","dwarfest");
@@ -33,63 +37,30 @@
     return $highest_id;
   }
 
-  function printTableQuestionsNumbers($vcIdSubject,$selectPartialNumber){
-    //Print all the questions from tableQuestions with the same vcIdSubject
+  function getMixedArray($vcIdSubject,$selectPartialNumber,$specIdMix){
+    //get question number or id mixed from DB
     connectSql();
-    $arrQuestionNumbers = array();
-    $arrMixedQuestionIds = array();
-    $result2 = mysql_query("SELECT bintQuestionIndex  FROM tableQuestions WHERE vcIdSubject = '".$vcIdSubject."' LIMIT 10");
+    $arrIdMixed = array();
+    $arrDataToMix = array();
+    $result2 = mysql_query("SELECT ".$specIdMix."  FROM tableQuestions WHERE vcIdSubject = '".$vcIdSubject."' AND intParcial = '".$selectPartialNumber."'");
     while ($row = mysql_fetch_array($result2)) {
-      $arrQuestionNumbers[] = $row["bintQuestionIndex"];
-      $arrMixedQuestionIds[] = $row["vcIdQuestion"];
+      $arrDataToMix[] = $row[$specIdMix];
     }
-    //echo count($arrMixedQuestionIds);
-    $arrLength = count($arrQuestionNumbers);
+    $arrLength = count($arrDataToMix);
+    //echo "<h1>".$arrLength."</h1>";
     while ($arrLength > 0) {
-      $randNumber = (array_rand($arrQuestionNumbers,1));
-      echo "<br>";
-      $questionNumber = $arrQuestionNumbers[$randNumber];
-      //editing this code
-      //printTableQuestions($vcIdSubject,$questionNumber,$selectPartialNumber);
-      //printForTableQuestions($vcIdSubject,$questionNumber,$selectPartialNumber);
-      //editing this code
-
+      $randId= (array_rand($arrDataToMix,1));
+      $questionId = $arrDataToMix[$randId];
+      //echo "<br />".(string)$questionId;
+      $arrIdMixed[] = $questionId;
       $arrLength--;
-      unset($arrQuestionNumbers[$randNumber]);
+      unset($arrDataToMix[$randId]);
     }
-
-    return $arrMixedQuestionIds;
-  }
-  function printTableQuestionsRandomId($arrQuestionNumbers){
-    //$arrQuestionIDs = array();
-    $registersNumber = count($arrQuestionIDs);
-    echo $registersNumber;
-    //Print all the questions from tableQuestions with the same vcIdSubject
-    //connectSql();
-    /*$arrQuestionNumbers = array();
-    $arrMixedQuestionIds = array();
-    $result2 = mysql_query("SELECT bintQuestionIndex  FROM tableQuestions WHERE vcIdSubject = '".$vcIdSubject."' LIMIT 10");
-    while ($row = mysql_fetch_array($result2)) {
-      $arrQuestionNumbers[] = $row["bintQuestionIndex"];
-      //$arrMixedQuestionIds[] = $row["vcIdQuestion"];
-    }
-    //echo count($arrMixedQuestionIds);
-    $arrLength = count($arrQuestionNumbers);
-    while ($arrLength > 0) {
-      $randNumber = (array_rand($arrQuestionNumbers,1));
-      echo "<br>";
-      $questionNumber = $arrQuestionNumbers[$randNumber];
-      //editing this code
-      //printTableQuestions($vcIdSubject,$questionNumber,$selectPartialNumber);
-      //printForTableQuestions($vcIdSubject,$questionNumber,$selectPartialNumber);
-      //editing this code
-      $arrLength--;
-      unset($arrQuestionNumbers[$randNumber]);
-    }*/
+    return ($arrIdMixed);
   }
 
   function printForTableQuestions($vcIdSubject,$topNumber,$selectPartialNumber){
-    //Print exam with function for
+    //Print exam with function for this is the most important function
     $arrQuestionIDs = array();
     $result2 = mysql_query("SELECT vcIdQuestion  FROM tableQuestions WHERE vcIdSubject = '".$vcIdSubject."' AND intParcial = '".$selectPartialNumber."' LIMIT 10");
     while ($row = mysql_fetch_array($result2)) {
@@ -112,6 +83,67 @@
       echo "<br />";
     }
   }
+
+  function printTablesforPDF($vcIdSubject,$selectPartialNumber,$specIdMix,$selectedNumerQuestions){
+    //this function was createt to send the content to a var to use it with FPDF
+    //due the hard usage of it I deleted FPDF and leave this function
+    $mixedArrayVcIdQuestion = array();
+    $mixedArrayVcIdQuestion = getMixedArray($vcIdSubject,$selectPartialNumber,$specIdMix);
+    $numberRegistered = count($mixedArrayVcIdQuestion);
+    echo"<table>";
+    echo"<thead>
+          <th>Pregunta</th>
+          <th></th>
+          <th>Respuesta</th>
+        </thead>";
+    for ($i=0; $i < $selectedNumerQuestions ; $i++) {
+      $examQuestionNumber = $i + 1;
+      printOpenQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
+      printBooleanQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
+      printMultipleQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
+    }
+    echo"</table>";
+  }
+
+  function printExamFooter(){
+    $examFooter = "<div class='examFooter' name='examFooter' style='border:thin solid black; position: absoluteh; bottom: '0'; text-align: center;>
+                    <p>Creado por SGAEP&#174; bajo la licencia GPLv3. SAITEC&#174; 2017</p>
+                    </div>";
+    return $examFooter;
+  }
+
+  function printExamHeader(){
+    $examHeader = "<div class='logoUNAM' name='logoUNAM'>
+                    <img src='../Images/logo2.png'>
+                    <div class='examData' name='examData' style='border:thin solid black'>
+                      <table class='dataCareer' name='dataCareer'>
+                        <tr>
+                          <td>Carrera</td>
+                          <td><input type='text' value=''/></td>
+                          <td>Asignatura</td>
+                          <td width='50%'><input type='text' value=''/ size='50'></td>
+                          <td>Parcial</td>
+                          <td width='5%'><input type='text' value='' size='9'/></td>
+                        </tr>
+                      </table>
+                      <table>
+                        <tr>
+                          <td>Nombre</td>
+                          <td width='25%'><input type='text' value='' size='30'/></td>
+                          <td>No. de Cuenta</td>
+                          <td><input type='text' value=''/></td>
+                          <td>Grupo</td>
+                          <td width='5%'><input type='text' value='' size='10'/></td>
+                          <td>Fecha</td>
+                          <td width='5%'><input type='text' value='' size='6'/></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  </br></br>";
+    return $examHeader;
+  }
+
   function printTableQuestions($vcIdSubject,$topNumber,$selectPartialNumber){
     //Print all the questions from tableQuestions with the same vcIdSubject
     connectSql();
@@ -132,44 +164,99 @@
       echo "</table>";
     }
   }
-  function printBooleanQuestions($vcIdQuestion,$selectPartialNumber){
+
+  function printBooleanQuestions($vcIdQuestion,$examQuestionNumber){
     connectSql();
     //GET the boolean questions for the subject
-    //echo("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
-    $result3 = mysql_query("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
-    //echo ("SELECT * FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
+    $result3 = mysql_query("SELECT intParcial,ltQuestion,boolAnswer FROM tableBooleanQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
     while ($row2 = mysql_fetch_array($result3)) {
-      echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-      echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
+      if($row2 != ''){
+        echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
+      }
       if ($row2["boolAnswer"] == 1) {
-        echo "<td><input type='text' value='Verdadero' readonly/></td>";
+        echo "<td>
+                <input type='radio' value='Verdadero' checked='checked' readonly/>Verdadero
+                <input type='radio' value='Falso' readonly/>Falso
+              </td></tr>";
       }else {
-        echo "<td><input type='text' value='Falso' readonly/></td>";
+        echo "<td>
+                <input type='radio' value='Verdadero' readonly/>Verdadero
+                <input type='radio' value='Falso' checked='checked' readonly/>Falso
+              </td></tr><tr><td></br></td></tr>";
       }
     }
   }
-  function printOpenQuestions($vcIdQuestion,$selectPartialNumber){
+
+  function printOpenQuestions($vcIdQuestion,$examQuestionNumber){
     //GET the Open Questions for selected subject
-      $result3 = mysql_query("SELECT * FROM tableOpenQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
-      while ($row2 = mysql_fetch_array($result3)) {
-        echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td>";
+    $result3 = mysql_query("SELECT intParcial,ltQuestion,ltAnswer FROM tableOpenQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
+    while ($row2 = mysql_fetch_array($result3)) {
+      if($row2 != ''){
+        echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
       }
+      //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      echo "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td></tr></td></tr><tr><td></br></td></tr>";
+    }
   }
-  function printMultipleQuestions($vcIdQuestion,$selectPartialNumber){
+
+  function printMultipleQuestions($vcIdQuestion,$examQuestionNumber){
     //Get the Multiple questions for selected subject
-      //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
-      $result3 = mysql_query("SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'");
-      //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
-      while ($row2 = mysql_fetch_array($result3)) {
-        echo "<td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td>";
-        echo "<tr><td>A)<input type='text' value='".$row2["ltAnswerA"]."' readonly/></td>";
-        echo "<td>B)<input type='text' value='".$row2["ltAnswerB"]."' readonly/></td></tr>";
-        echo "<td>C)<input type='text' value='".$row2["ltAnswerC"]."' readonly/></td>";
-        echo "<td>D)<input type='text' value='".$row2["ltAnswerD"]."' readonly/></td>";
-        echo "<td><input type='text' value='".$row2["vcCorrectAnswer"]."' readonly/></td>";
+    //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
+    $result3 = mysql_query("SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."'");
+    //echo "SELECT * FROM tableMultipleQuestions WHERE vcIdQuestion = '".$vcIdQuestion."' AND intParcial = '".$selectPartialNumber."'";
+    while ($row2 = mysql_fetch_array($result3)) {
+      if($row2 != ''){
+        echo "<tr><td>".$examQuestionNumber.".-<input type='text' value='".$row2["ltQuestion"]."' readonly/></td><td></td>";
+        //echo "<tr><td>".$examQuestionNumber.".-</td>";
       }
+      //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
+      //echo "<td><input type='text' value='".$row2["ltQuestion"]."' readonly/></td></tr>";
+      echo "<tr><td>A)<input type='text' value='".$row2["ltAnswerA"]."' readonly/></td>";
+      echo "<td>B)<input type='text' value='".$row2["ltAnswerB"]."' readonly/></td></tr>";
+      echo "<tr><td>C)<input type='text' value='".$row2["ltAnswerC"]."' readonly/></td>";
+      echo "<td>D)<input type='text' value='".$row2["ltAnswerD"]."' readonly/></td>";
+      //echo "<td><input type='text' value='".$row2["vcCorrectAnswer"]."' readonly/></td></tr>";
+      switch ($row2["vcCorrectAnswer"]) {
+        case 'A':
+          echo "<td>";
+          echo "<input type='radio' value='A' checked='checked' readonly />A";
+          echo "<input type='radio' value='B' readonly />B";
+          echo "<input type='radio' value='C' readonly />C";
+          echo "<input type='radio' value='D' readonly />D";
+          echo "</td></tr>";
+          echo "<tr><td></br></td></tr>";
+          break;
+        case 'B':
+          echo "<td>";
+          echo "<input type='radio' value='A' readonly />A";
+          echo "<input type='radio' value='B' checked='checked' readonly />B";
+          echo "<input type='radio' value='C' readonly />C";
+          echo "<input type='radio' value='D' readonly />D";
+          echo "</td></tr>";
+          echo "<tr><td></br></td></tr>";
+          break;
+        case 'C':
+          echo "<td>";
+          echo "<input type='radio' value='A' readonly />A";
+          echo "<input type='radio' value='B' readonly />B";
+          echo "<input type='radio' value='C' checked='checked' readonly />C";
+          echo "<input type='radio' value='D' readonly />D";
+          echo "</td></tr>";
+          echo "<tr><td></br></td></tr>";
+          break;
+        case 'D':
+          echo "<td>";
+          echo "<input type='radio' value='A' readonly />A";
+          echo "<input type='radio' value='B' readonly />B";
+          echo "<input type='radio' value='C' readonly />C";
+          echo "<input type='radio' value='D' checked='checked' readonly />D";
+          echo "</td></tr>";
+          echo "<tr><td></br></td></tr>";
+          break;
+        default:
+          echo "Error";
+          break;
+      }
+    }
   }
 ?>
