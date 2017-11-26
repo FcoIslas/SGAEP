@@ -76,7 +76,6 @@
 						<br />-->
 						<label for="selectPartialNumber">Seleccionar Parcial</label>
 						<select class="selectPartialNumber" name="selectPartialNumber" id="selectPartialNumber">
-							<option value="0">General</option>
 							<option value="1">Primer Parcial</option>
 							<option value="2">Segundo Parcial</option>
 						</select>
