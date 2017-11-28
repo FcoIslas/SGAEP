@@ -14,15 +14,27 @@
   $topNumber = getMaxValueQuestions();
   $specIdMix = 'vcIdQuestion'; //Request get mixed vcIdQuestions for subject
   //Create PDF
-  $examToPrint = printTablesforPDF($vcIdSubject,$selectPartialNumber,$specIdMix,$selectedNumerQuestions); 
+  $examToPrint = printTablesforPDF($vcIdSubject,$selectPartialNumber,$specIdMix,$selectedNumerQuestions);
+
+  //Delete answers ont $examToPrint
+  $examNoAnswers = str_replace("checked='checked'","",$examToPrint);
+  //Code by https://stackoverflow.com/users/79126/mrfidge
+  $examNoAnswers2 = preg_replace('#(<td style=.*?>).*?(</td>)#', '$1$2', $examNoAnswers);
+  //Delete answers ont $examToPrint
+
   $examHeader = printExamHeader();
-  $examPDFContent = $examHeader . $examToPrint;
+  $pagebreakStart = "<page>";
+  $pagebreakEnd = "</page>";
+  $examPDFContent = $pagebreakStart . $examHeader . $examToPrint . $pagebreakEnd . $pagebreakStart . $examHeader . $examNoAnswers2 .$pagebreakEnd;
+  //echo $examPDFContent;
   require __DIR__.'/vendor/autoload.php';
   use Spipu\Html2Pdf\Html2Pdf;
   $html2pdf = new Html2Pdf();
   $html2pdf->writeHTML($examPDFContent);
-  $html2pdf->output();
+  $html2pdf->output('answers.pdf');
   //Create PDF
+
+
   //Main section
 
 
@@ -78,7 +90,7 @@
       $xinputOpenQuestions = printOpenQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
       $xinputBooleanQuestions = printBooleanQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
       $xinputMultipleQuestions = printMultipleQuestions($mixedArrayVcIdQuestion[$i],$examQuestionNumber);
-      $xinputContent .= $xinputOpenQuestions . $xinputBooleanQuestions . $xinputMultipleQuestions; 
+      $xinputContent .= $xinputOpenQuestions . $xinputBooleanQuestions . $xinputMultipleQuestions;
     }
     $xinputEnd = "</table>";
     $xinput = $xinputStart . $xinputContent . $xinputEnd;
@@ -117,7 +129,7 @@
     while ($row2 = mysql_fetch_array($result3)) {
       if($row2 != ''){
         $xinput1 = "<tr><td>".$examQuestionNumber.".".$row2["ltQuestion"]."'</td><td></td>";
-     
+
         if ($row2["boolAnswer"] == 1) {
           $xinput2 = "<td>
                         <input type='radio' value='Verdadero' checked='checked' readonly/>Verdadero
@@ -141,7 +153,7 @@
     while ($row2 = mysql_fetch_array($result3)) {
       if($row2 != ''){
         $xinput1 =  "<tr><td>".$examQuestionNumber." ".$row2["ltQuestion"]."</td><td></td>";
-        $xinput2 = "<td>".$row2["ltAnswer"]."</td></tr><tr><td><br /></td></tr>";
+        $xinput2 = "<td style='display: block;'>".$row2["ltAnswer"]."</td></tr><tr><td><br /></td></tr>";
       }
       //echo "<tr><td><input type='text' value='".$row2["intParcial"]."' readonly/></td>";
       //$xinput2 = "<td><input type='text' value='".$row2["ltAnswer"]."' readonly/></td></tr></td></tr><tr><td></br></td></tr>";
