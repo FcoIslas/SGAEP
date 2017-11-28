@@ -182,17 +182,48 @@ function obtainRFC(){
 	var idApellido = 'Apellidos'+rfcToModify;
 	var idName = 'Name'+rfcToModify;
 	var idPasswd = 'Passwd'+rfcToModify;
+  var vcCareerRFC = 'vcCareer'+rfcToModify;
+  var vcTurn = 'Turn'+rfcToModify;
 
 	var valorApellido = document.getElementById(idApellido).textContent;
 	var valueName = document.getElementById(idName).textContent;
 	var valuePasswd = document.getElementById(idPasswd).textContent;
+  var assignCareer = document.getElementById(vcCareerRFC).textContent;
+  var vcTurnModify = document.getElementById(vcTurn).textContent;
 
+  switch (vcTurnModify) {
+    case 'Matutino':
+       document.getElementById('turnAddUser').value = "1";
+      break;
+    case 'Vespertino':
+        document.getElementById('turnAddUser').value = "2";
+        break;
+    case 'Mixto':
+        document.getElementById('turnAddUser').value = "3";
+        break;
+    default:
+     alert("Error on turn");
+  }
+
+  switch (assignCareer) {
+    case 'Informática':
+      document.getElementById('formSelectAddUserCareer').value =  "Informática";
+      break;
+    case 'IME':
+      document.getElementById('formSelectAddUserCareer').value =  "IME";
+      break;
+    case 'ITSE':
+        document.getElementById('formSelectAddUserCareer').value =  "ITSE";
+        break;
+    default:
+    alert("Error");
+  }
+
+  //document.getElementById('formSelectAddUserCareer').value =  "ITSE";
 	document.getElementById('formModifyUserName').value = valueName;
 	document.getElementById('formModifyUserLastName').value = valorApellido;
 	document.getElementById('formModifyUserPasswd').value = valuePasswd;
-	document.getElementById('formAddUserTurn').value= strTurn;
-
-
+	document.getElementById('formAddUserTurn').value = strTurn;
 }
 
 function removeDiacritics(str) {

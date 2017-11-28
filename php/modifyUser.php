@@ -50,7 +50,7 @@
 								$connect = mysql_connect("localhost","root","dwarfest");
 								if(!$connect){
 									die(mysql_error());
-								}	
+								}
 								mysql_select_db("sgaep");
 								$results = mysql_query("SELECT * FROM tableUsers");
 								while ($row = mysql_fetch_array($results)) {
@@ -60,7 +60,8 @@
 									<td <?php echo "id='Name".$row["vcRFC"]."'"?> ><?php echo $row["vcName"]?></td>
 									<td <?php echo "id='Apellidos".$row["vcRFC"]."'"?> ><?php echo $row["vcApellidos"]?></td>
 									<td <?php echo "id='Passwd".$row["vcRFC"]."'"?> ><?php echo $row["vcPasswd"]?></td>
-									<td><?php echo $row["vcCareer"]?></td>
+									<?php echo "<td id='vcCareer".$row["vcRFC"]."'>".$row["vcCareer"]."</td>"?>
+									<?php //echo "id='".$row["vcRFC"].$row["vcCarrer"]"'"$row["vcCareer"]?>
 									<td <?php echo "id='Turn".$row["vcRFC"]."'"?> ><?php if($row["intTurn"]==1){
 										echo "Matutino";
 									}elseif ($row["intTurn"]==2) {
@@ -75,7 +76,7 @@
 										echo "user";
 									}
 									?></td>
-									<td><?php 
+									<td><?php
 											if($row['bType']<>0){
 												echo "<input type='radio' name='editUser' value= '".$row["vcRFC"]."'>";
 											}
@@ -98,8 +99,30 @@
 						<tr><td><label>Nombres</label></td><td><input type="text" name="formModifyUserName" id="formModifyUserName" required="required"></td></tr>
 						<tr><td><label>Apellidos</label></td><td><input type="text" name="formModifyUserLastName" id="formModifyUserLastName" required="required"></td></tr>
 						<tr><td><label>Contraseña</label></td><td><input type="text" name="formModifyUserPasswd" id="formModifyUserPasswd" required="required"></td></tr>
-						<tr><td><label>Carrera</label></td><td><select name="formAddUserCareer"><option value="Informática">Informática</option><option value="ITSE">ITSE</option><option value="IME">IME</option></select></td></tr>
-						<tr><td><label>Turno</label></td><td><select name="formAddUserTurn"><option value="1">Matutino</option><option value="2">Vespertino</option><option value="3">Mixto</option></select></td></tr>
+						<tr>
+							<td>
+								<label>Carrera</label>
+							</td>
+							<td>
+								<select name="formAddUserCareer" id="formSelectAddUserCareer">
+									<option value="Informática">Informática</option>
+									<option value="ITSE">ITSE</option>
+									<option value="IME">IME</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label>Turno</label>
+							</td>
+							<td>
+								<select name="formAddUserTurn" id="turnAddUser">
+									<option value="1">Matutino</option>
+									<option value="2">Vespertino</option>
+									<option value="3">Mixto</option>
+								</select>
+							</td>
+						</tr>
 						<tr hidden="hidden"><td><label>UserType</label></td><td><input type="number" name="formAddUserType" value="1"></td></tr>
 					</table><br/>
 					<input type="submit" value="Modificar Usuario">
@@ -122,4 +145,3 @@
 		</footer>
 	</body>
 </html>
-
